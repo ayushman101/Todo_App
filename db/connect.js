@@ -7,7 +7,7 @@ const connectDB= (url)=>{
     useCreateIndex:true,
     useFindAndModify:false,
     useUnifiedTopology:true,
-})
+}).then(console.log("DB connected"))
 
 };
 

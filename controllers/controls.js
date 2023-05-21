@@ -5,13 +5,14 @@ const Task=require('../models/schema');
 const getAlltasks= async (req,res)=>{
     
     console.log("get all tasks");
+    const {id}=req.params;
 
     try {
         
-        const task = await Task.find();   //   {}  is called a filter object which is just an empty object 
+        const task = await Task.find({CreatedBy:id});   //   {}  is called a filter object which is just an empty object 
                                             // the function 'find ' with filter object returns all the objects 
         // console.log(task);
-        res.status(201).json(task);
+        res.status(200).json(task);
         
     } catch (error) {
 
@@ -60,6 +61,9 @@ try {
 const createtasks= async (req, res)=> {
     
     console.log("create task");
+
+    req.body.CreatedBy=req.body.UserID;
+
     try {
         const task = await Task.create(req.body);
         
@@ -80,10 +84,13 @@ const createtasks= async (req, res)=> {
 const deletetasks= async (req,res)=>{
     
     try {
-        
+        // const userID= req.body.CreatedBy;
         const taskId=req.params.id;
         
-        const task= await Task.findOneAndDelete({_id:taskId});
+        const task= await Task.findOneAndDelete({
+            _id:taskId,
+            CreatedBy:req.body.UserID
+        });
         
         if(!task)
         {
@@ -109,7 +116,10 @@ const updateTask=async (req,res)=>{
         console.log("updating task")
         const taskId=req.params.id;
 
-        const task= await Task.findById(taskId)
+        const task= await Task.findOne({
+            _id:taskId,
+            CreatedBy: req.body.UserID
+        });
 
         if(!task)
         {

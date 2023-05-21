@@ -13,6 +13,12 @@ const TaskSchema= new mongoose.Schema({
     completed:{
         type:Boolean,
         default:false,
+    },
+    
+    CreatedBy:{
+        type:mongoose.Types.ObjectId,  // the type would be same as the objectid in mongoose
+        ref:'User',
+        required:[true,"Please Provide User"]
     }
 });
                                 
